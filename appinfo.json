@@ -1,0 +1,12 @@
+{
+    "id": "nl.arnolderuiter.f1tv",
+    "version": "0.1.0",
+    "vendor": "ArnoldDeRuiter",
+    "type": "web",
+    "main": "index.html",
+    "title": "F1 TV",
+    "icon": "icon.png",
+    "largeIcon": "icon.png",
+    "bgColor": "#e20600",
+    "iconColor": "#e20600"
+}

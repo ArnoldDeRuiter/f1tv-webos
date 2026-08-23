@@ -29,7 +29,7 @@ cat > "$PKG_DIR/packageinfo.json" <<EOF
 }
 EOF
 
-( cd "$WORK/data" && tar --owner=0 --group=0 -czf "$WORK/data.tar.gz" . )
+( cd "$WORK/data" && tar --owner=0 --group=0 --mtime="UTC 2020-01-01" --sort=name -czf "$WORK/data.tar.gz" . )
 
 mkdir -p "$WORK/control"
 cat > "$WORK/control/control" <<EOF
@@ -41,7 +41,7 @@ Description: Unofficial F1TV wrapper for rooted webOS TVs -- full-screen, chrome
 Section: misc
 Priority: optional
 EOF
-( cd "$WORK/control" && tar --owner=0 --group=0 -czf "$WORK/control.tar.gz" control )
+( cd "$WORK/control" && tar --owner=0 --group=0 --mtime="UTC 2020-01-01" --sort=name -czf "$WORK/control.tar.gz" control )
 
 echo "2.0" > "$WORK/debian-binary"
 OUT="${APP_ID}_${VERSION}_all.ipk"

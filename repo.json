@@ -7,16 +7,16 @@
             "iconUri": "https://raw.githubusercontent.com/ArnoldDeRuiter/f1tv-webos/master/icon.png",
             "manifest": {
                 "id": "nl.arnolderuiter.f1tv",
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "type": "web",
                 "title": "F1 TV",
                 "appDescription": "Unofficial F1TV wrapper -- full-screen launcher for F1TV's own website, no Chromecast needed.",
                 "iconUri": "https://raw.githubusercontent.com/ArnoldDeRuiter/f1tv-webos/master/icon.png",
                 "sourceUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos",
                 "rootRequired": false,
-                "ipkUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos/releases/download/0.1.0/nl.arnolderuiter.f1tv_0.1.0_all.ipk",
+                "ipkUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos/releases/download/0.1.1/nl.arnolderuiter.f1tv_0.1.1_all.ipk",
                 "ipkHash": {
-                    "sha256": "a130987f78a873d7c02816f948396cb2e1bdb0f8df2a37ba68d9a182d6b4d9c3"
+                    "sha256": "d9b00e60f18b180afcc1569bae026a94424bfd404556102dc8ab7d7c39094626"
                 }
             }
         }

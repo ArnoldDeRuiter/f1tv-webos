@@ -13,7 +13,7 @@ trap 'rm -rf "$WORK"' EXIT
 
 DATA_DIR="$WORK/data/$INSTALL_ROOT"
 mkdir -p "$DATA_DIR"
-cp -R appinfo.json index.html icon.png "$DATA_DIR/"
+cp -R appinfo.json index.html icon.png splash.png "$DATA_DIR/"
 
 # packageinfo.json is separate from appinfo.json and lives at a different
 # path entirely -- required by the on-device installer (appinstalld), or

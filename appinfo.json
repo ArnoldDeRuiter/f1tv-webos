@@ -1,6 +1,6 @@
 {
     "id": "nl.arnolderuiter.f1tv",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "vendor": "ArnoldDeRuiter",
     "type": "web",
     "main": "index.html",
@@ -8,5 +8,6 @@
     "icon": "icon.png",
     "largeIcon": "icon.png",
     "bgColor": "#e20600",
-    "iconColor": "#e20600"
+    "iconColor": "#e20600",
+    "splashBackground": "splash.png"
 }

@@ -16,7 +16,7 @@
                 "rootRequired": false,
                 "ipkUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos/releases/download/0.1.1/nl.arnolderuiter.f1tv_0.1.1_all.ipk",
                 "ipkHash": {
-                    "sha256": "d9b00e60f18b180afcc1569bae026a94424bfd404556102dc8ab7d7c39094626"
+                    "sha256": "5335529778a75b7c6594f3217e053875871defde4119c03ecbdb6068b17f00fc"
                 }
             }
         }

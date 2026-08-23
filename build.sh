@@ -14,6 +14,21 @@ trap 'rm -rf "$WORK"' EXIT
 DATA_DIR="$WORK/data/$INSTALL_ROOT"
 mkdir -p "$DATA_DIR"
 cp -R appinfo.json index.html icon.png "$DATA_DIR/"
+
+# packageinfo.json is separate from appinfo.json and lives at a different
+# path entirely -- required by the on-device installer (appinstalld), or
+# install fails with "Cannot find packageinfo.json". Confirmed by inspecting
+# already-installed homebrew apps on a real TV, not from docs alone.
+PKG_DIR="$WORK/data/media/developer/apps/usr/palm/packages/$APP_ID"
+mkdir -p "$PKG_DIR"
+cat > "$PKG_DIR/packageinfo.json" <<EOF
+{
+  "id": "$APP_ID",
+  "version": "$VERSION",
+  "app": "$APP_ID"
+}
+EOF
+
 ( cd "$WORK/data" && tar --owner=0 --group=0 -czf "$WORK/data.tar.gz" . )
 
 mkdir -p "$WORK/control"

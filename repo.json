@@ -14,7 +14,7 @@
                 "iconUri": "https://raw.githubusercontent.com/ArnoldDeRuiter/f1tv-webos/master/icon.png",
                 "sourceUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos",
                 "rootRequired": false,
-                "ipkUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos/releases/download/v0.1.0/nl.arnolderuiter.f1tv_0.1.0_all.ipk",
+                "ipkUrl": "https://github.com/ArnoldDeRuiter/f1tv-webos/releases/download/0.1.0/nl.arnolderuiter.f1tv_0.1.0_all.ipk",
                 "ipkHash": {
                     "sha256": "a130987f78a873d7c02816f948396cb2e1bdb0f8df2a37ba68d9a182d6b4d9c3"
                 }

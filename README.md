@@ -29,6 +29,39 @@ from [mariovalney/f1tv](https://github.com/mariovalney/f1tv) (this repo
 reimplements the same approach independently rather than copying their
 files, but full credit for figuring out DRM/login "just works" this way).
 
+## Login autofill (optional)
+
+F1's own session cookies are short-lived (roughly 24 hours), so you end up
+back at the login screen fairly often. This app can autofill the
+username/password fields the moment F1's login page appears — it never
+clicks or submits anything, signing in is still a deliberate, manual last
+step.
+
+It's entirely optional: with no credentials file present, the app behaves
+exactly as before. To enable it, put a JSON file at
+`/var/lib/webosbrew/tv-credentials.json` on the TV (root-only, mode `600`):
+
+```json
+{
+  "f1tv": {"username": "you@example.com", "password": "your-password"}
+}
+```
+
+Two ways to get that file onto the TV:
+
+- **Manually**: SSH into the TV as root and write the file yourself.
+- **Via [lgtv-playbook](https://github.com/ArnoldDeRuiter/lgtv-playbook)**:
+  an Ansible playbook that keeps the credentials encrypted at rest
+  (`ansible-vault`) and deploys them for you — also covers
+  [family7-webos](https://github.com/ArnoldDeRuiter/family7-webos)'s own
+  login autofill from the same file. See that repo's `ansible/` directory.
+
+A background process (`loginfill.py`, started when the app launches)
+checks for an existing valid session first and does nothing at all if
+you're already logged in. Otherwise it watches for the login form, fills
+it once, and exits immediately — it doesn't keep running in the
+background for the rest of the session.
+
 ## Known limitations
 
 - **No 4K** — same limitation reported by the prior-art project; appears to

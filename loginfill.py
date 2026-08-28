@@ -139,6 +139,7 @@ def build_fill_js(username, password):
     setReactInputValue(userField, username);
     setReactInputValue(passField, password);
     filled = true;
+    console.log('__loginFillComplete__');
   }
 
   // Polling rather than a MutationObserver: the login form sits behind a
@@ -171,39 +172,99 @@ def _find_target():
         time.sleep(POLL_INTERVAL_SECONDS)
 
 
+AUTH_COOKIE_DOMAIN_SUFFIX = "formula1.com"
+AUTH_COOKIE_NAME = "login"
+
+
+def _call(sock, msg_id, method, params=None):
+    """Request/response helper: sends one CDP command and blocks for the
+    matching reply, discarding any events that arrive first."""
+    _send_frame(sock, json.dumps({"id": msg_id, "method": method, "params": params or {}}))
+    while True:
+        opcode, payload = _recv_frame(sock)
+        if opcode != 0x1:
+            continue
+        try:
+            msg = json.loads(payload.decode("utf-8"))
+        except ValueError:
+            continue
+        if msg.get("id") == msg_id:
+            return msg
+
+
+def _has_valid_session(sock):
+    """True if a cookie proving an already-logged-in session exists. Checked
+    before injecting anything -- no point watching for a login form that
+    won't even show up because the site will just load straight into the
+    logged-in view."""
+    result = _call(sock, 100, "Network.getAllCookies")
+    cookies = result.get("result", {}).get("cookies", [])
+    for cookie in cookies:
+        domain = cookie.get("domain", "")
+        if domain.endswith(AUTH_COOKIE_DOMAIN_SUFFIX) and cookie.get("name") == AUTH_COOKIE_NAME:
+            return True
+    return False
+
+
+FILL_COMPLETE_MARKER = "__loginFillComplete__"
+
+
+def _is_fill_complete_message(payload):
+    try:
+        msg = json.loads(payload.decode("utf-8"))
+    except ValueError:
+        return False
+    if msg.get("method") != "Runtime.consoleAPICalled":
+        return False
+    args = msg.get("params", {}).get("args", [])
+    return bool(args) and args[0].get("value") == FILL_COMPLETE_MARKER
+
+
 def _watch_target(target, fill_js):
-    """Blocks until the target's debugger connection closes (app closed)."""
+    """Blocks until the fields are filled, or the target closes (app closed) --
+    whichever comes first. Once autofill succeeds there's nothing further for
+    this connection to do, so it closes itself immediately rather than
+    holding a root process + CDP connection open for the rest of the app's
+    lifetime just to watch a login page that's no longer showing."""
     target_id = target["id"]
     ws_url = target["webSocketDebuggerUrl"]
     path = ws_url.split(CDP_HOST + ":" + str(CDP_PORT), 1)[1]
     sock = socket.create_connection((CDP_HOST, CDP_PORT), timeout=10)
     try:
         _handshake(sock, CDP_HOST, CDP_PORT, path)
+        _call(sock, 99, "Network.enable")
+        if _has_valid_session(sock):
+            print("loginfill: already logged in, nothing to fill", flush=True)
+            return "already-logged-in"
         _send_frame(sock, json.dumps({"id": 1, "method": "Page.enable"}))
+        _send_frame(sock, json.dumps({"id": 2, "method": "Runtime.enable"}))
         _send_frame(
             sock,
             json.dumps(
                 {
-                    "id": 2,
+                    "id": 3,
                     "method": "Page.addScriptToEvaluateOnNewDocument",
                     "params": {"source": fill_js},
                 }
             ),
         )
         _send_frame(
-            sock, json.dumps({"id": 3, "method": "Runtime.evaluate", "params": {"expression": fill_js}})
+            sock, json.dumps({"id": 4, "method": "Runtime.evaluate", "params": {"expression": fill_js}})
         )
         print("loginfill: injected into target %s" % target_id, flush=True)
         sock.settimeout(60)
         while True:
             try:
-                opcode, _payload = _recv_frame(sock)
+                opcode, payload = _recv_frame(sock)
             except socket.timeout:
                 continue
             if opcode == 0x8:
-                break
+                return "closed"
+            if opcode == 0x1 and _is_fill_complete_message(payload):
+                return "filled"
     except OSError as exc:
         print("loginfill: target %s connection ended: %s" % (target_id, exc), flush=True)
+        return "error"
     finally:
         try:
             sock.close()
@@ -220,8 +281,8 @@ def main():
         return
     fill_js = build_fill_js(username, password)
     target = _find_target()
-    _watch_target(target, fill_js)
-    print("loginfill: F1TV closed, exiting", flush=True)
+    reason = _watch_target(target, fill_js)
+    print("loginfill: exiting (%s)" % reason, flush=True)
 
 
 if __name__ == "__main__":

@@ -47,14 +47,24 @@ exactly as before. To enable it, put a JSON file at
 }
 ```
 
-Two ways to get that file onto the TV:
+Manually, over SSH as root:
 
-- **Manually**: SSH into the TV as root and write the file yourself.
-- **Via [lgtv-playbook](https://github.com/ArnoldDeRuiter/lgtv-playbook)**:
-  an Ansible playbook that keeps the credentials encrypted at rest
-  (`ansible-vault`) and deploys them for you — also covers
-  [family7-webos](https://github.com/ArnoldDeRuiter/family7-webos)'s own
-  login autofill from the same file. See that repo's `ansible/` directory.
+```sh
+ssh root@<tv-ip> "cat > /var/lib/webosbrew/tv-credentials.json << 'EOF'
+{\"f1tv\": {\"username\": \"you@example.com\", \"password\": \"your-password\"}}
+EOF
+chmod 600 /var/lib/webosbrew/tv-credentials.json"
+```
+
+The same file can hold [family7-webos](https://github.com/ArnoldDeRuiter/family7-webos)'s
+credentials too (each app only reads its own top-level key), e.g.
+`{"f1tv": {...}, "family7": {...}}`.
+
+If you'd rather not type plaintext credentials over SSH by hand every
+time, an Ansible playbook with the credentials kept in an `ansible-vault`
+file and a task that deploys the decrypted JSON to the TV works well for
+this — that's just one way to automate the same manual step above, not
+something this repo ships.
 
 A background process (`loginfill.py`, started when the app launches)
 checks for an existing valid session first and does nothing at all if

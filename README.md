@@ -72,27 +72,6 @@ you're already logged in. Otherwise it watches for the login form, fills
 it once, and exits immediately — it doesn't keep running in the
 background for the rest of the session.
 
-## Known limitations
-
-- **No 4K** — same limitation reported by the prior-art project; appears to
-  be inherent to how the DRM/player negotiates quality on this platform,
-  not something a wrapper can influence either way.
-- **Disable Multiview** — if streams don't start, go to
-  [F1TV settings](https://f1tv.formula1.com/settings) and turn Multiview
-  off. Reported necessary by the prior-art project; not independently
-  re-verified here.
-- **D-pad navigation** depends entirely on F1TV's own website, not on
-  anything this wrapper does — F1TV is built commercially with smart-TV
-  clients in mind, so it's reasonably likely to already be keyboard/D-pad
-  friendly, but that's F1TV's own responsibility, not something fixable
-  from this side if it isn't.
-- A **GrandPrixRadio-inside-this-app** integration was considered and is
-  **not possible**: F1TV's own CSP (`frame-ancestors 'self'`) and
-  `X-Frame-Options: SAMEORIGIN` block this page from being embedded inside
-  anything else, including a persistent wrapper UI of our own — the moment
-  this redirects to F1TV, our own page/JS is gone. Confirmed via the
-  server's actual response headers, not assumed.
-
 ## Installing
 
 ```sh

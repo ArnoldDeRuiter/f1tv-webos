@@ -173,7 +173,11 @@ def _find_target():
 
 
 AUTH_COOKIE_DOMAIN_SUFFIX = "formula1.com"
-AUTH_COOKIE_NAME = "login"
+# Confirmed live: "login"/"user-metadata" linger as stale cookies even
+# after logging out, so their mere presence is not proof of a real active
+# session -- "entitlement_token" is cleared on logout and only reappears
+# after a genuine fresh sign-in, so that's the one actually worth checking.
+AUTH_COOKIE_NAME = "entitlement_token"
 
 
 def _call(sock, msg_id, method, params=None):

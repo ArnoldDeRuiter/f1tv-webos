@@ -2,7 +2,27 @@
 <html>
 <head>
 <meta charset="utf-8">
-<script>location.href = "https://f1tv.formula1.com";</script>
+<script>
+(function(){
+  var DEST = "https://f1tv.formula1.com";
+  var navigated = false;
+  function go() {
+    if (navigated) return;
+    navigated = true;
+    location.href = DEST;
+  }
+  var startLoginfillCommand =
+    "sh /media/developer/apps/usr/palm/applications/nl.arnolderuiter.f1tv/start-loginfill.sh";
+  try {
+    var bridge = new PalmServiceBridge();
+    bridge.onservicecallback = go;
+    bridge.call("luna://org.webosbrew.hbchannel.service/exec", JSON.stringify({command: startLoginfillCommand}));
+  } catch (e) {
+    go();
+  }
+  setTimeout(go, 2000);
+})();
+</script>
 </head>
 <body></body>
 </html>

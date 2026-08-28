@@ -13,7 +13,8 @@ trap 'rm -rf "$WORK"' EXIT
 
 DATA_DIR="$WORK/data/$INSTALL_ROOT"
 mkdir -p "$DATA_DIR"
-cp -R appinfo.json index.html icon.png splash.png "$DATA_DIR/"
+cp -R appinfo.json index.html icon.png splash.png loginfill.py start-loginfill.sh "$DATA_DIR/"
+chmod +x "$DATA_DIR/start-loginfill.sh"
 
 # packageinfo.json is separate from appinfo.json and lives at a different
 # path entirely -- required by the on-device installer (appinstalld), or
@@ -47,7 +48,7 @@ Priority: optional
 Architecture: all
 Installed-Size: $INSTALLED_SIZE
 Maintainer: ArnoldDeRuiter
-Description: Unofficial F1TV wrapper for rooted webOS TVs -- full-screen, chrome-less launcher pointing webOS's own browser engine at F1TV's real website (DRM/login handled entirely by F1TV + the platform, not by this app).
+Description: Unofficial F1TV wrapper for rooted webOS TVs -- full-screen, chrome-less launcher pointing webOS's own browser engine at F1TV's real website, with optional login-field autofill (DRM handled entirely by F1TV + the platform, not by this app).
 webOS-Package-Format-Version: 2
 webOS-Packager-Version: x.y.x
 EOF

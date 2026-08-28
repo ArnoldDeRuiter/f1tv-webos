@@ -74,12 +74,22 @@ background for the rest of the session.
 
 ## Installing
 
+In Homebrew Channel, open **Add repository** and enter:
+
+```
+https://github.com/ArnoldDeRuiter/f1tv-webos/releases/latest/download/repo.json
+```
+
+F1 TV then appears in the app list and updates alongside everything else
+Homebrew Channel manages.
+
+To build it yourself instead:
+
 ```sh
 ./build.sh
 ```
-produces `nl.arnolderuiter.f1tv_<version>_all.ipk`. Install via Homebrew
-Channel the normal way (add this repo via `repo.json`, or sideload the ipk
-directly).
+produces `nl.arnolderuiter.f1tv_<version>_all.ipk`, installable by
+sideloading the ipk directly.
 
 ## License
 

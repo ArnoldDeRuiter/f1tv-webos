@@ -20,7 +20,7 @@
   // stay dead rather than being respawned by the platform).
   var appDir = "/media/developer/apps/usr/palm/applications/nl.arnolderuiter.f1tv";
   var startBackgroundCommand =
-    "sh " + appDir + "/kill-netflix.sh; sh " + appDir + "/start-loginfill.sh";
+    "sh " + appDir + "/kill-netflix.sh; sh " + appDir + "/kill-youtube-preload.sh; sh " + appDir + "/start-loginfill.sh";
   try {
     var bridge = new PalmServiceBridge();
     bridge.onservicecallback = go;
